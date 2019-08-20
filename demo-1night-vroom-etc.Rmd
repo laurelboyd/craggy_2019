@@ -1,0 +1,38 @@
+---
+title: "Demo OneNightCount.csv and vroom"
+author: "John D. Smith"
+date: "7/24/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(vroom)
+library(inspectdf)
+library(skimr)
+library(janitor)
+```
+Generate a minimally serviceable data frame:
+```{r}
+oneNightCount <- vroom("https://raw.githubusercontent.com/pdxrlang/craggy_2019/master/data/oneNightCount.csv")
+oneNightCount <- oneNightCount %>% 
+  clean_names %>% 
+  select(-total) %>% 
+  filter(location != "TOTAL")
+```
+
+Inspect with a few skimr and inspectdf:
+```{r}
+skim(oneNightCount)
+
+inspectdf::inspect_cor(oneNightCount) %>% show_plot()
+inspectdf::inspect_num(oneNightCount) %>% show_plot()
+inspectdf::inspect_na(oneNightCount) 
+
+```
+
