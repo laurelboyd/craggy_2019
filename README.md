@@ -16,3 +16,15 @@ King County Eviction Data for cRaggy 2019
 
 This dataset came from the SDSS 2019 Data Hack Activity.
 
+## Examples & kick-starters
+
+These examples could help get you interested or started:
+
+  * [demo-1night-vroom-etc.md](demo-1night-vroom-etc.md)
+  * [king county evictions: burro demo](https://tladeras.shinyapps.io/evictions_king_county/)
+  * [Introduction to Geospatial Visualization](https://htmlpreview.github.io/?https://github.com/pdxrlang/craggy_2019/blob/master/Introduction_to_Visualizing_Geospatial_Data.html)
+
+## Notes and resources
+
+  * The "aggregate" meetup on August 20 produced [these notes](https://docs.google.com/document/d/1wRCDgZkA1fUBX2JonwGENTlkEP5fl6tdF_eDeNbJzVc/edit)
+  * An online follow-up to our Aggregate orientation / discussion is on August 22, 2019 at 6:30 pm PDT: 	https://zoom.us/j/608789508 

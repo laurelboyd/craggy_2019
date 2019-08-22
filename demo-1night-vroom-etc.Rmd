@@ -2,7 +2,7 @@
 title: "Demo OneNightCount.csv and vroom"
 author: "John D. Smith"
 date: "7/24/2019"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
