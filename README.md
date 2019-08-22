@@ -23,6 +23,7 @@ These examples could help get you interested or started:
   * [demo-1night-vroom-etc.md](demo-1night-vroom-etc.md)
   * [king county evictions: burro demo](https://tladeras.shinyapps.io/evictions_king_county/)
   * [Introduction to Geospatial Visualization](https://htmlpreview.github.io/?https://github.com/pdxrlang/craggy_2019/blob/master/Introduction_to_Visualizing_Geospatial_Data.html)
+  * [Run burro](evictions.md)
 
 ## Notes and resources
 

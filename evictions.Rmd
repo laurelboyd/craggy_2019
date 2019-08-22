@@ -2,7 +2,7 @@
 title: "Looking at Evictions"
 author: "Ted Laderas"
 date: "8/19/2019"
-output: html_document
+output: md_document
 ---
 
 This RMarkdown document gives you a head start by processing the data, and lets you visualize the data using `burro`.
@@ -14,7 +14,7 @@ install.packages("remotes")
 remotes::install_github("laderast/burro")
 ```
 
-
+Once installed, run from here on...
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
