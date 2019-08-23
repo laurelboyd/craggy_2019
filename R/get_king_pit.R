@@ -1,6 +1,17 @@
 library(dplyr)
 library(rio)
 
+# globalVariables hack that avoids "Notes" from being issued
+# by devtools::check().
+# See: https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+utils::globalVariables("%>%")
+utils::globalVariables(c(
+  "year",
+  "coc_number",
+  "unsheltered_chronically_homeless_individuals"
+))
+
+
 #' Counts PIT per year for King County.
 #' @return data.frame with one row per year.
 #' @export

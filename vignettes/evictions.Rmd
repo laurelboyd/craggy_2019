@@ -28,13 +28,15 @@ Once installed, run from here on...
 knitr::opts_chunk$set(echo = TRUE)
 library(burro)
 library(here)
+library(tidyr)
+library(dplyr)
+library(janitor)
 ```
 
 ## Looking at the `evictions` dataset
 
 
 ```{r}
-library(dplyr)
 evictions <- readr::read_csv(here::here("inst", "extdata", "evictions.csv")) %>% 
   janitor::clean_names() %>% 
   mutate(low_flag = factor(low_flag), imputed=factor(imputed), subbed=factor(subbed)) %>%

@@ -24,7 +24,6 @@ Once installed, run from here on…
 ## Looking at the `evictions` dataset
 
 ``` r
-library(dplyr)
 evictions <- readr::read_csv(here::here("inst", "extdata", "evictions.csv")) %>% 
   janitor::clean_names() %>% 
   mutate(low_flag = factor(low_flag), imputed=factor(imputed), subbed=factor(subbed)) %>%
@@ -47,7 +46,7 @@ burro::explore_data(evictions)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:6952
+    ## Listening on http://127.0.0.1:7434
 
 ![](evictions_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
@@ -108,7 +107,7 @@ burro::explore_data(forclose_wa)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:6593
+    ## Listening on http://127.0.0.1:5584
 
 ![](evictions_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
@@ -154,7 +153,7 @@ burro::explore_data(one_night)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:8022
+    ## Listening on http://127.0.0.1:3937
 
 ![](evictions_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 

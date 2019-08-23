@@ -31,7 +31,7 @@ We encourage you to collaborate together and work on visualizations! Our goal is
 
 In September, we'll have a visualization gallery and lightning talks about the visualizations and insights we've come up with. Event information will be posted on our [Meetup page](https://www.meetup.com/portland-r-user-group/events/).
 
-All are welcome. Participation in cRaggy requires agreeing to the [Code of Conduct](CODE_OF_CONDUCT.md)
+All are welcome. Participation in cRaggy requires agreeing to the [Code of Conduct](.github/CODE_OF_CONDUCT.md)
 
 ## Data Source
 
