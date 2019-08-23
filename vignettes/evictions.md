@@ -47,7 +47,7 @@ burro::explore_data(evictions)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:3468
+    ## Listening on http://127.0.0.1:6952
 
 ![](evictions_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
@@ -108,7 +108,7 @@ burro::explore_data(forclose_wa)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:4030
+    ## Listening on http://127.0.0.1:6593
 
 ![](evictions_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
@@ -154,7 +154,7 @@ burro::explore_data(one_night)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:8419
+    ## Listening on http://127.0.0.1:8022
 
 ![](evictions_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
