@@ -8,8 +8,8 @@ Authors@R:
            email = "laderast@ohsu.edu")
 Description: cRaggy is a data exploration and visualization activity for 
     the [Portland R User Group](https://www.meetup.com/portland-r-user-group/). 
-    We make a large dataset available for visualization and analysis, and 
-    let you present and share your results, visualizations, and insights about 
+    We make a large dataset available for visualization and analysis, so 
+    that you can present and share your results, visualizations, and insights about 
     the dataset. For the 2019 edition of cRaggy, we will be looking at a 
     combination of housing data and eviction data for King County, Washington, 
     United States. We hope to gain insights about the nature of evictions in 
