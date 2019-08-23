@@ -6,6 +6,7 @@
 
 1. [cRaggy is Back - looking at Housing and Evictions in King County](#cRaggy-is-Back-looking-at-Housing-and-Evictions-in-King-County)
 1. [Data Source](#data-source)
+1. [Accessing the data](#accessing-the-data)
 1. [Examples and kick-starters](#examples-and-kick-starters)
 1. [Notes and resources](#notes-and-resources)
 1. [License](#license)
@@ -20,23 +21,55 @@
 
 ---
 
-## cRaggy is Back - looking at Housing and Evictions in King County
+## cRaggy is Back - Looking at Housing and Evictions in King County
 
 cRaggy, our data exploration and visualization activity is back! For those of you unfamiliar with cRaggy, the [Portland R User Group](https://www.meetup.com/portland-r-user-group/) makes a large dataset available for visualization and analysis, so that you can present and share your results, visualizations, and insights about the dataset.
 
 We will be looking at a combination of housing data and eviction data for King County, Washington, United States, hoping to gain insights about the nature of evictions in King County. This dataset comes courtesy of the planners of the [2019 Symposium for Data Science and Statistics](https://ww2.amstat.org/meetings/sdss/2019/). 
 
-We encourage you to collaborate together and work on visualizations! Our goal is to encourage collaboration, and share our code and insights.
+We encourage you to collaborate together and work on visualizations! Our goal is to encourage collaboration and share our code and insights.
 
-In September, we'll have a visualization gallery and lightning talks about the visualizations and insights we've come up with. Event information will be posted on our [Meetup page](https://www.meetup.com/portland-r-user-group/events/).
+In September, we'll have a visualization gallery and lightning talks about the visualizations and insights you've come up with. Event information will be posted on our [Meetup page](https://www.meetup.com/portland-r-user-group/events/).
 
 All are welcome. Participation in cRaggy requires agreeing to the [Code of Conduct](.github/CODE_OF_CONDUCT.md)
 
 ## Data Source
 
-King County Eviction Data for cRaggy 2019
+King County Eviction Data for cRaggy 2019.
 
 This dataset came from the [SDSS 2019 Data Hack Activity](https://ww2.amstat.org/meetings/sdss/2019/).
+
+## Accessing the data
+
+This project is organized as an [R package](https://r-pkgs.org/), which
+contains the data. An easy way to access the data is to:
+
+1. Clone this repository to your local machine.
+1. Open the project in [RStudio](https://www.rstudio.com/products/rstudio/).
+1. Click on the `Build > Install and Restart` button, which in the
+    default application configuration
+    is in the `Environment, History, ...` pane in the upper right of
+    the application window.
+1. The package will be built, installed in your local package library, 
+    and loaded into your session. 
+    When you see `library(craggy2019)` executed in
+    the console, then the build and load is complete and your environment
+    is ready for you to use the package.
+1. The data files are in the `inst/extdata` directory, so you can refer to
+    them through the file system, 
+    e.g. `here::here("inst", "extdata", "evictions.csv")`.
+1. However, often you will be using this package in another project
+    where you are exploring and analyzing the data.
+    In that case, you load the package into your session with
+    a `library(craggy2019)` call.
+    Then use the `base::system.file` function to reference a file
+    within the package. 
+    For example, 
+    `readr::read_csv(system.file("extdata", "evictions.csv", package = "craggy2019"))`. 
+    With `system.file`, you do not reference the
+    `inst` directory level. When a package is loaded, 
+    everything within the `inst` directory is placed at the 
+    root level of the package.
 
 ## Examples and kick-starters
 
