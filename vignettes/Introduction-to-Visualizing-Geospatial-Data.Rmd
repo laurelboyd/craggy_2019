@@ -17,7 +17,7 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-In preparation for craggy 2019 here is a very brief introduction to simple ways to visualize spatial data. This notebook will introduce some R packages and functions to visualize spatial data. The notebook will use 6 total packages, 3 of which are in the tidyverse. The three tidy functions will be used for routine data wrangling. The 3 other packages will be used to work with the spatial data. The first package is `sf` and it is my personal preferred package to use when working with spatial data. The `sf` package contains all of the spatial operation functions needed for routine spatial analysis, and the syntax meshes well with the tidyverse. The `sf` package introduces the `sf` type, and you can think of the `sf` type as a spatial data frame. It is like a normal vanilla data frame but there is an additional "geometry" column that is of list column type, and that column contains all of the spatial information. 
+In preparation for craggy 2019, here is a very brief introduction to simple ways to visualize spatial data. This notebook will introduce some R packages and functions to visualize spatial data. The notebook will use 6 total packages, 3 of which are in the tidyverse. The three tidy functions will be used for routine data wrangling. The 3 other packages will be used to work with the spatial data. The first package is `sf` and it is my personal preferred package to use when working with spatial data. The `sf` package contains all of the spatial operation functions needed for routine spatial analysis, and the syntax meshes well with the tidyverse. The `sf` package introduces the `sf` type, and you can think of the `sf` type as a spatial data frame. It is like a normal vanilla data frame but there is an additional "geometry" column that is of list column type, and that column contains all of the spatial information. 
 
 The next package we will be using is `mapview` and it provides functionality to create interactive web maps. If you need to quickly visualize your spatial data `mapview` is a great first tool to use. 
 
@@ -29,8 +29,6 @@ library(dplyr)
 library(ggplot2)
 library(stringr)
 
-library(here)
-
 # spatial packages
 library(sf)  # working with spatial data
 library(mapview)  # quick and easy geospatial visualizations
@@ -41,7 +39,7 @@ To start I will read the evictions data into memory. The data is stored in a csv
 
 ```{r load the evictions data}
 evictions <- read.csv(
-  here::here("inst", "extdata", "evictions.csv"), 
+  system.file("extdata", "evictions.csv", package = "craggy2019"), 
   stringsAsFactors = FALSE
 )
 
@@ -51,7 +49,7 @@ head(evictions, n = 5)
 The data doesn't have any spatial information other than a "GEOID" which is also referred to as a "fips code". Fips codes are a way of designating a spatial hierarchy to different geographies in the U.S. The number of digits in the fips code (most commonly seen with the column name "GEOID") corresponds to a specific census geographic specification.
 
 ```{r fips_code, echo=FALSE, fig.cap="", out.width = '100%'}
-knitr::include_graphics(here::here("inst", "images", "FIPS_CODE_IMAGE.png"))
+knitr::include_graphics(system.file("images", "FIPS_CODE_IMAGE.png", package = "craggy2019"))
 ```
 
 The image above shows the digit designations for states, counties, tracts, and block groups. Since our data is at the census tract level we need to make sure that all of the GEOIDs have 11 digits. Since the GEOIDs are numeric, when loading data with fips codes it is common that the data will be read into memory as numeric. This is to be expected but can cause issues since the fips codes are categorical in nature. For example, the state fips code of California is "06" but the leading 0 is often dropped when loaded as a numeric. For this reason, it is usually good to convert the GEOID to character and see if all of the observations have the right amount of characters. We will do that below. 

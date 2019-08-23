@@ -3,7 +3,7 @@ Introduction to Geospatial Visualization
 [Marley Buchman](https://github.com/buchmayne)
 2019-08-23
 
-In preparation for craggy 2019 here is a very brief introduction to
+In preparation for craggy 2019, here is a very brief introduction to
 simple ways to visualize spatial data. This notebook will introduce some
 R packages and functions to visualize spatial data. The notebook will
 use 6 total packages, 3 of which are in the tidyverse. The three tidy
@@ -34,8 +34,6 @@ library(dplyr)
 library(ggplot2)
 library(stringr)
 
-library(here)
-
 # spatial packages
 library(sf)  # working with spatial data
 library(mapview)  # quick and easy geospatial visualizations
@@ -49,7 +47,7 @@ first five rows.
 
 ``` r
 evictions <- read.csv(
-  here::here("inst", "extdata", "evictions.csv"), 
+  system.file("extdata", "evictions.csv", package = "craggy2019"), 
   stringsAsFactors = FALSE
 )
 

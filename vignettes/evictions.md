@@ -24,7 +24,7 @@ Once installed, run from here on…
 ## Looking at the `evictions` dataset
 
 ``` r
-evictions <- readr::read_csv(here::here("inst", "extdata", "evictions.csv")) %>% 
+evictions <- readr::read_csv(system.file("extdata", "evictions.csv", package = "craggy2019")) %>% 
   janitor::clean_names() %>% 
   mutate(low_flag = factor(low_flag), imputed=factor(imputed), subbed=factor(subbed)) %>%
   mutate(parent_location = stringr::str_replace(parent_location, pattern = ", Washington", replacement = ""))
@@ -46,7 +46,7 @@ burro::explore_data(evictions)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:8145
+    ## Listening on http://127.0.0.1:8590
 
 ![](evictions_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
@@ -57,7 +57,7 @@ should_be_numeric <- c("estimated_number_foreclosures", "estimated_number_mortga
 "bls_unemployment_rate", "ofheo_price_change")
 
 
-forclose_wa <- readr::read_csv(here::here("inst", "extdata", "forecloseWATract.csv")) %>%
+forclose_wa <- readr::read_csv(system.file("extdata", "forecloseWATract.csv", package = "craggy2019")) %>%
   janitor::clean_names() %>% mutate_at(should_be_numeric, ~na_if(., "#NULL!")) %>% mutate_at(should_be_numeric, ~stringr::str_replace(., "%", "")) %>% mutate_at(should_be_numeric, as.numeric) %>% select(-county, -state, -sta)
 ```
 
@@ -107,7 +107,7 @@ burro::explore_data(forclose_wa)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:4415
+    ## Listening on http://127.0.0.1:4638
 
 ![](evictions_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
@@ -116,7 +116,7 @@ burro::explore_data(forclose_wa)
 This one doesn’t work - I will push fixes to `burro`.
 
 ``` r
-king_zillow <- readr::read_csv(here::here("inst", "extdata", "king_zillow.csv"))
+king_zillow <- readr::read_csv(system.file("extdata", "king_zillow.csv", package = "craggy2019"))
 
 burro::explore_data(king_zillow,outcome_var = NULL)
 ```
@@ -124,7 +124,7 @@ burro::explore_data(king_zillow,outcome_var = NULL)
 ## One Night Counts
 
 ``` r
-one_night <- readr::read_csv(here::here("inst", "extdata", "oneNightCount.csv")) %>% janitor::clean_names() %>% tidyr::gather("neighborhood", "count", -year, -location)
+one_night <- readr::read_csv(system.file("extdata", "oneNightCount.csv", package = "craggy2019")) %>% janitor::clean_names() %>% tidyr::gather("neighborhood", "count", -year, -location)
 ```
 
     ## Parsed with column specification:
@@ -153,14 +153,13 @@ burro::explore_data(one_night)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:8070
+    ## Listening on http://127.0.0.1:5363
 
 ![](evictions_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 # Sample code for grabbing spatial data
 library(tigris)
-library(here)
 options(tigris_use_cache = TRUE)
 
 # Grab shape files for King county at the census tract level
