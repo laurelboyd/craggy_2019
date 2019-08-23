@@ -1,8 +1,16 @@
 ---
 title: "Looking at Evictions"
-author: "Ted Laderas"
-date: "8/19/2019"
-output: md_document
+author: "[Ted Laderas](https://github.com/laderast)"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    hard_line_breaks: no
+    toc: true
+numbersections: true
+vignette: >
+  %\VignetteIndexEntry{"evictions"}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 This RMarkdown document gives you a head start by processing the data, and lets you visualize the data using `burro`.
@@ -27,7 +35,7 @@ library(here)
 
 ```{r}
 library(dplyr)
-evictions <- readr::read_csv(here::here("data/evictions.csv")) %>% 
+evictions <- readr::read_csv(here::here("inst", "extdata", "evictions.csv")) %>% 
   janitor::clean_names() %>% 
   mutate(low_flag = factor(low_flag), imputed=factor(imputed), subbed=factor(subbed)) %>%
   mutate(parent_location = stringr::str_replace(parent_location, pattern = ", Washington", replacement = ""))
@@ -42,7 +50,7 @@ should_be_numeric <- c("estimated_number_foreclosures", "estimated_number_mortga
 "bls_unemployment_rate", "ofheo_price_change")
 
 
-forclose_wa <- readr::read_csv(here::here("data/forecloseWATract.csv")) %>%
+forclose_wa <- readr::read_csv(here::here("inst", "extdata", "forecloseWATract.csv")) %>%
   janitor::clean_names() %>% mutate_at(should_be_numeric, ~na_if(., "#NULL!")) %>% mutate_at(should_be_numeric, ~stringr::str_replace(., "%", "")) %>% mutate_at(should_be_numeric, as.numeric) %>% select(-county, -state, -sta)
 
 burro::explore_data(forclose_wa)
@@ -54,7 +62,7 @@ burro::explore_data(forclose_wa)
 This one doesn't work - I will push fixes to `burro`.
 
 ```{r eval=FALSE}
-king_zillow <- readr::read_csv(here::here("data/king_zillow.csv"))
+king_zillow <- readr::read_csv(here::here("inst", "extdata", "king_zillow.csv"))
 
 burro::explore_data(king_zillow,outcome_var = NULL)
 ```
@@ -62,7 +70,7 @@ burro::explore_data(king_zillow,outcome_var = NULL)
 ## One Night Counts
 
 ```{r}
-one_night <- readr::read_csv(here::here("data/oneNightCount.csv")) %>% janitor::clean_names() %>% tidyr::gather("neighborhood", "count", -year, -location)
+one_night <- readr::read_csv(here::here("inst", "extdata", "oneNightCount.csv")) %>% janitor::clean_names() %>% tidyr::gather("neighborhood", "count", -year, -location)
 
 burro::explore_data(one_night)
 ```

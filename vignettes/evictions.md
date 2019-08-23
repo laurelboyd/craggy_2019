@@ -1,33 +1,35 @@
+Looking at Evictions
+================
+[Ted Laderas](https://github.com/laderast)
+2019-08-23
+
+  - [Looking at the `evictions`
+    dataset](#looking-at-the-evictions-dataset)
+  - [Explore King County Zillow
+    Values](#explore-king-county-zillow-values)
+  - [One Night Counts](#one-night-counts)
+
 This RMarkdown document gives you a head start by processing the data,
 and lets you visualize the data using `burro`.
 
 Run this code block to install `burro` (Data exploration app)
 
-    install.packages("remotes")
-    remotes::install_github("laderast/burro")
+``` r
+install.packages("remotes")
+remotes::install_github("laderast/burro")
+```
 
 Once installed, run from here on…
 
-Looking at the `evictions` dataset
-----------------------------------
+## Looking at the `evictions` dataset
 
-    library(dplyr)
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-    evictions <- readr::read_csv(here::here("data/evictions.csv")) %>% 
-      janitor::clean_names() %>% 
-      mutate(low_flag = factor(low_flag), imputed=factor(imputed), subbed=factor(subbed)) %>%
-      mutate(parent_location = stringr::str_replace(parent_location, pattern = ", Washington", replacement = ""))
+``` r
+library(dplyr)
+evictions <- readr::read_csv(here::here("inst", "extdata", "evictions.csv")) %>% 
+  janitor::clean_names() %>% 
+  mutate(low_flag = factor(low_flag), imputed=factor(imputed), subbed=factor(subbed)) %>%
+  mutate(parent_location = stringr::str_replace(parent_location, pattern = ", Washington", replacement = ""))
+```
 
     ## Parsed with column specification:
     ## cols(
@@ -37,24 +39,28 @@ Looking at the `evictions` dataset
 
     ## See spec(...) for full column specifications.
 
-    burro::explore_data(evictions)
+``` r
+burro::explore_data(evictions)
+```
 
     ## Warning in Sys.setlocale("LC_CTYPE", "Chinese"): OS reports request to set
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:4004
+    ## Listening on http://127.0.0.1:3468
 
-![](evictions_files/figure-markdown_strict/unnamed-chunk-2-1.png)
+![](evictions_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-    should_be_numeric <- c("estimated_number_foreclosures", "estimated_number_mortgages", "estimated_foreclosure_rate"      , "total_90_day_vacant_residential_addresses","total_residential_addresses","estimated_90_day_vacancy_rate", "total_hicost_2004_to_2006_hmda_loans",     
-    "total_2004_to_2006_hmda_loans",            
-    "estimated_hicost_loan_rate",               
-    "bls_unemployment_rate", "ofheo_price_change")
+``` r
+should_be_numeric <- c("estimated_number_foreclosures", "estimated_number_mortgages", "estimated_foreclosure_rate"      , "total_90_day_vacant_residential_addresses","total_residential_addresses","estimated_90_day_vacancy_rate", "total_hicost_2004_to_2006_hmda_loans",     
+"total_2004_to_2006_hmda_loans",            
+"estimated_hicost_loan_rate",               
+"bls_unemployment_rate", "ofheo_price_change")
 
 
-    forclose_wa <- readr::read_csv(here::here("data/forecloseWATract.csv")) %>%
-      janitor::clean_names() %>% mutate_at(should_be_numeric, ~na_if(., "#NULL!")) %>% mutate_at(should_be_numeric, ~stringr::str_replace(., "%", "")) %>% mutate_at(should_be_numeric, as.numeric) %>% select(-county, -state, -sta)
+forclose_wa <- readr::read_csv(here::here("inst", "extdata", "forecloseWATract.csv")) %>%
+  janitor::clean_names() %>% mutate_at(should_be_numeric, ~na_if(., "#NULL!")) %>% mutate_at(should_be_numeric, ~stringr::str_replace(., "%", "")) %>% mutate_at(should_be_numeric, as.numeric) %>% select(-county, -state, -sta)
+```
 
     ## Parsed with column specification:
     ## cols(
@@ -79,44 +85,48 @@ Looking at the `evictions` dataset
     ## )
 
     ## Warning: NAs introduced by coercion
-
+    
+    ## Warning: NAs introduced by coercion
+    
+    ## Warning: NAs introduced by coercion
+    
+    ## Warning: NAs introduced by coercion
+    
+    ## Warning: NAs introduced by coercion
+    
+    ## Warning: NAs introduced by coercion
+    
+    ## Warning: NAs introduced by coercion
+    
     ## Warning: NAs introduced by coercion
 
-    ## Warning: NAs introduced by coercion
-
-    ## Warning: NAs introduced by coercion
-
-    ## Warning: NAs introduced by coercion
-
-    ## Warning: NAs introduced by coercion
-
-    ## Warning: NAs introduced by coercion
-
-    ## Warning: NAs introduced by coercion
-
-    burro::explore_data(forclose_wa)
+``` r
+burro::explore_data(forclose_wa)
+```
 
     ## Warning in Sys.setlocale("LC_CTYPE", "Chinese"): OS reports request to set
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:4014
+    ## Listening on http://127.0.0.1:4030
 
-![](evictions_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+![](evictions_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
-Explore King County Zillow Values
----------------------------------
+## Explore King County Zillow Values
 
 This one doesn’t work - I will push fixes to `burro`.
 
-    king_zillow <- readr::read_csv(here::here("data/king_zillow.csv"))
+``` r
+king_zillow <- readr::read_csv(here::here("inst", "extdata", "king_zillow.csv"))
 
-    burro::explore_data(king_zillow,outcome_var = NULL)
+burro::explore_data(king_zillow,outcome_var = NULL)
+```
 
-One Night Counts
-----------------
+## One Night Counts
 
-    one_night <- readr::read_csv(here::here("data/oneNightCount.csv")) %>% janitor::clean_names() %>% tidyr::gather("neighborhood", "count", -year, -location)
+``` r
+one_night <- readr::read_csv(here::here("inst", "extdata", "oneNightCount.csv")) %>% janitor::clean_names() %>% tidyr::gather("neighborhood", "count", -year, -location)
+```
 
     ## Parsed with column specification:
     ## cols(
@@ -136,22 +146,26 @@ One Night Counts
     ##   TOTAL = col_double()
     ## )
 
-    burro::explore_data(one_night)
+``` r
+burro::explore_data(one_night)
+```
 
     ## Warning in Sys.setlocale("LC_CTYPE", "Chinese"): OS reports request to set
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:3594
+    ## Listening on http://127.0.0.1:8419
 
-![](evictions_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](evictions_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-    # Sample code for grabbing spatial data
-    library(tigris)
-    library(here)
-    options(tigris_use_cache = TRUE)
+``` r
+# Sample code for grabbing spatial data
+library(tigris)
+library(here)
+options(tigris_use_cache = TRUE)
 
-    # Grab shape files for King county at the census tract level
-    king_spatial <- tracts(state = "WA", county = "King")
+# Grab shape files for King county at the census tract level
+king_spatial <- tracts(state = "WA", county = "King")
 
-    dat <- geo_join(spatial_data = king_spatial, evictions, by = "GEOID")
+dat <- geo_join(spatial_data = king_spatial, evictions, by = "GEOID") 
+```

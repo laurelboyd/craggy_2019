@@ -1,8 +1,16 @@
 ---
 title: "Demo OneNightCount.csv and vroom"
-author: "John D. Smith"
-date: "7/24/2019"
-output: md_document
+author: "[John D. Smith](https://github.com/smithjd/)"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    hard_line_breaks: no
+    toc: true
+numbersections: true
+vignette: >
+  %\VignetteIndexEntry{"demo-1night-vroom-etc"}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r setup, include=FALSE}
@@ -35,4 +43,3 @@ inspectdf::inspect_num(oneNightCount) %>% show_plot()
 inspectdf::inspect_na(oneNightCount) 
 
 ```
-

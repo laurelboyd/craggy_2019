@@ -1,8 +1,16 @@
 ---
 title: "Introduction to Geospatial Visualization"
-author: "Marley Buchman"
-date: "8/10/2019"
-output: html_document
+author: "[Marley Buchman](https://github.com/buchmayne)"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    hard_line_breaks: no
+    toc: true
+numbersections: true
+vignette: >
+  %\VignetteIndexEntry{"Introduction-to-Visualizing-Geospatial-Data"}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r setup, include=FALSE}
@@ -21,6 +29,8 @@ library(dplyr)
 library(ggplot2)
 library(stringr)
 
+library(here)
+
 # spatial packages
 library(sf)  # working with spatial data
 library(mapview)  # quick and easy geospatial visualizations
@@ -30,14 +40,19 @@ library(tigris)  # downloading geospatial data from the census
 To start I will read the evictions data into memory. The data is stored in a csv so I will use `read.csv()` to read the data and assign the data frame to evictions. After reading the data into memory I will print the first five rows.
 
 ```{r load the evictions data}
-evictions <- read.csv("data/evictions.csv", stringsAsFactors = FALSE)
+evictions <- read.csv(
+  here::here("inst", "extdata", "evictions.csv"), 
+  stringsAsFactors = FALSE
+)
 
 head(evictions, n = 5)
 ```
 
 The data doesn't have any spatial information other than a "GEOID" which is also referred to as a "fips code". Fips codes are a way of designating a spatial hierarchy to different geographies in the U.S. The number of digits in the fips code (most commonly seen with the column name "GEOID") corresponds to a specific census geographic specification.
 
-![](images/FIPS_CODE_IMAGE.png)
+```{r fips_code, echo=FALSE, fig.cap="", out.width = '100%'}
+knitr::include_graphics(here::here("inst", "images", "FIPS_CODE_IMAGE.png"))
+```
 
 The image above shows the digit designations for states, counties, tracts, and block groups. Since our data is at the census tract level we need to make sure that all of the GEOIDs have 11 digits. Since the GEOIDs are numeric, when loading data with fips codes it is common that the data will be read into memory as numeric. This is to be expected but can cause issues since the fips codes are categorical in nature. For example, the state fips code of California is "06" but the leading 0 is often dropped when loaded as a numeric. For this reason, it is usually good to convert the GEOID to character and see if all of the observations have the right amount of characters. We will do that below. 
 
