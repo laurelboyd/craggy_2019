@@ -4,7 +4,7 @@
 
 **Table of Contents**
 
-1. [cRaggy is Back - looking at Housing and Evictions in King County](#cRaggy-is-Back-looking-at-Housing-and-Evictions-in-King-County)
+1. [cRaggy is Back - looking at Housing and Evictions in King County](#craggy-is-back-looking-at-housing-and-evictions-in-king-county)
 1. [Data Source](#data-source)
 1. [Accessing the data](#accessing-the-data)
 1. [Examples and kick-starters](#examples-and-kick-starters)
