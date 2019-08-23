@@ -9,7 +9,7 @@
     - Unit tests can be run automatically as part of the build process.
     - The process is easier for developing reusable code that is accessible within this package or from other projects.
 
-* [aggRegate Meeting Notes 2019-08-20](https://docs.google.com/document/d/1wRCDgZkA1fUBX2JonwGENTlkEP5fl6tdF_eDeNbJzVc/edit)
+* [aggRegate Meeting Notes 2019-08-20 & 22](https://docs.google.com/document/d/1wRCDgZkA1fUBX2JonwGENTlkEP5fl6tdF_eDeNbJzVc/edit)
 
 * [burro](https://laderast.github.io/burro/) application to [browse Evictions data](https://tladeras.shinyapps.io/evictions_king_county/).
 

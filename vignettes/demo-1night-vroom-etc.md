@@ -44,7 +44,7 @@ library(janitor)
 Generate a minimally serviceable data frame:
 
 ``` r
-oneNightCount <- vroom("https://raw.githubusercontent.com/pdxrlang/craggy_2019/master/data/oneNightCount.csv")
+oneNightCount <- vroom(system.file("extdata", "oneNightCount.csv", package = "craggy2019"))
 ```
 
     ## Observations: 130
