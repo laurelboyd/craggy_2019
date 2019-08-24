@@ -7,8 +7,10 @@
 1. [cRaggy is Back - Looking at Housing and Evictions in King County](#craggy-is-back---looking-at-housing-and-evictions-in-king-county)
 2. [Data Source](#data-source)
 3. [Accessing the data](#accessing-the-data)
+
     3.1 [Add your code to the existing source code](#add-your-code-to-the-existing-source-code)
     3.2 [Use the `craggy2019` package from your own independent project](#use-the-craggy2019-package-from-your-own-independent-project)
+
 4. [Examples and kick-starters](#examples-and-kick-starters)
 5. [Notes and resources](#notes-and-resources)
 6. [License](#license)
