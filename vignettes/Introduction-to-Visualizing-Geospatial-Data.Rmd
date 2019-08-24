@@ -48,9 +48,7 @@ head(evictions, n = 5)
 
 The data doesn't have any spatial information other than a "GEOID" which is also referred to as a "fips code". Fips codes are a way of designating a spatial hierarchy to different geographies in the U.S. The number of digits in the fips code (most commonly seen with the column name "GEOID") corresponds to a specific census geographic specification.
 
-```{r fips_code, echo=FALSE, fig.cap="", out.width = '100%'}
-knitr::include_graphics(system.file("images", "FIPS_CODE_IMAGE.png", package = "craggy2019"))
-```
+![](images/FIPS_CODE_IMAGE.png)
 
 The image above shows the digit designations for states, counties, tracts, and block groups. Since our data is at the census tract level we need to make sure that all of the GEOIDs have 11 digits. Since the GEOIDs are numeric, when loading data with fips codes it is common that the data will be read into memory as numeric. This is to be expected but can cause issues since the fips codes are categorical in nature. For example, the state fips code of California is "06" but the leading 0 is often dropped when loaded as a numeric. For this reason, it is usually good to convert the GEOID to character and see if all of the observations have the right amount of characters. We will do that below. 
 

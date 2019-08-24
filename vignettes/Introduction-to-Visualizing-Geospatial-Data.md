@@ -97,7 +97,7 @@ designating a spatial hierarchy to different geographies in the U.S. The
 number of digits in the fips code (most commonly seen with the column
 name “GEOID”) corresponds to a specific census geographic specification.
 
-<img src="/Users/jimtyhurst/src/r/craggy_2019/inst/images/FIPS_CODE_IMAGE.png" width="100%" />
+![](images/FIPS_CODE_IMAGE.png)
 
 The image above shows the digit designations for states, counties,
 tracts, and block groups. Since our data is at the census tract level we
