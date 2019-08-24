@@ -3,7 +3,12 @@ library(rio)
 
 # globalVariables hack that avoids "Notes" from being issued
 # by devtools::check().
-# See: https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+# See:
+# https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+# for the solution recommended by Hadley Wickham, which we follow here.
+# But see:
+# https://nathaneastwood.github.io/2019/08/18/no-visible-binding-for-global-variable/
+# for alternative solutions.
 utils::globalVariables("%>%")
 utils::globalVariables(c(
   "year",

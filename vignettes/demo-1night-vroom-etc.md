@@ -1,19 +1,20 @@
 Demo OneNightCount.csv and vroom
 ================
 [John D. Smith](https://github.com/smithjd/)
-2019-08-23
+2019-08-24
 
 ``` r
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ─────── tidyverse 1.2.1 ──
+    ## ── Attaching packages ────── tidyverse 1.2.1 ──
 
-    ## ✔ tibble  2.1.3     ✔ readr   1.3.1
-    ## ✔ tidyr   0.8.3     ✔ purrr   0.3.2
-    ## ✔ tibble  2.1.3     ✔ forcats 0.4.0
+    ## ✔ ggplot2 3.2.1     ✔ readr   1.3.1
+    ## ✔ tibble  2.1.3     ✔ purrr   0.3.2
+    ## ✔ tidyr   0.8.3     ✔ stringr 1.4.0
+    ## ✔ ggplot2 3.2.1     ✔ forcats 0.4.0
 
-    ## ── Conflicts ────────── tidyverse_conflicts() ──
+    ## ── Conflicts ───────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -40,6 +41,10 @@ library(janitor)
     ## The following objects are masked from 'package:stats':
     ## 
     ##     chisq.test, fisher.test
+
+``` r
+library(craggy2019)
+```
 
 Generate a minimally serviceable data frame:
 
@@ -72,11 +77,11 @@ skim(oneNightCount)
     ##  n obs: 120 
     ##  n variables: 13 
     ## 
-    ## ── Variable type:character ─────────────────────
+    ## ── Variable type:character ────────────────────
     ##  variable missing complete   n min max empty n_unique
     ##  location       0      120 120   5  18     0       12
     ## 
-    ## ── Variable type:numeric ───────────────────────
+    ## ── Variable type:numeric ──────────────────────
     ##         variable missing complete   n    mean     sd   p0  p25    p50
     ##           auburn      12      108 120    5.88  11.67    0    0    1  
     ##        east_side       0      120 120   13.48  24.72    0    0    3  

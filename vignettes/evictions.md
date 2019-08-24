@@ -1,7 +1,7 @@
 Looking at Evictions
 ================
 [Ted Laderas](https://github.com/laderast)
-2019-08-23
+2019-08-24
 
   - [Looking at the `evictions`
     dataset](#looking-at-the-evictions-dataset)
@@ -17,6 +17,10 @@ Run this code block to install `burro` (Data exploration app)
 ``` r
 install.packages("remotes")
 remotes::install_github("laderast/burro")
+
+# Install from the source repository,
+# if you are not running in a fork of the craggy2019 project.
+# remotes::install_github("pdxrlang/craggy_2019")
 ```
 
 Once installed, run from here on…
@@ -46,7 +50,7 @@ burro::explore_data(evictions)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:8590
+    ## Listening on http://127.0.0.1:6180
 
 ![](evictions_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
@@ -107,7 +111,7 @@ burro::explore_data(forclose_wa)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:4638
+    ## Listening on http://127.0.0.1:7470
 
 ![](evictions_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
@@ -153,7 +157,7 @@ burro::explore_data(one_night)
     ## locale to "Chinese" cannot be honored
 
     ## 
-    ## Listening on http://127.0.0.1:5363
+    ## Listening on http://127.0.0.1:5680
 
 ![](evictions_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 

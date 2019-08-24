@@ -33,6 +33,9 @@ library(stringr)
 library(sf)  # working with spatial data
 library(mapview)  # quick and easy geospatial visualizations
 library(tigris)  # downloading geospatial data from the census
+
+# data package
+library(craggy2019)
 ```
 
 To start I will read the evictions data into memory. The data is stored in a csv so I will use `read.csv()` to read the data and assign the data frame to evictions. After reading the data into memory I will print the first five rows.

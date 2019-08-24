@@ -20,6 +20,10 @@ Run this code block to install `burro` (Data exploration app)
 ```{r eval=FALSE}
 install.packages("remotes")
 remotes::install_github("laderast/burro")
+
+# Install from the source repository,
+# if you are not running in a fork of the craggy2019 project.
+# remotes::install_github("pdxrlang/craggy_2019")
 ```
 
 Once installed, run from here on...
@@ -30,6 +34,7 @@ library(burro)
 library(tidyr)
 library(dplyr)
 library(janitor)
+library(craggy2019)
 ```
 
 ## Looking at the `evictions` dataset
