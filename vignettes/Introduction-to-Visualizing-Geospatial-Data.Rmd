@@ -1,15 +1,23 @@
 ---
 title: "Introduction to Geospatial Visualization"
-author: "Marley Buchman"
-date: "8/10/2019"
-output: html_document
+author: "[Marley Buchman](https://github.com/buchmayne)"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    hard_line_breaks: no
+    toc: true
+numbersections: true
+vignette: >
+  %\VignetteIndexEntry{"Introduction-to-Visualizing-Geospatial-Data"}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-In preparation for craggy 2019 here is a very brief introduction to simple ways to visualize spatial data. This notebook will introduce some R packages and functions to visualize spatial data. The notebook will use 6 total packages, 3 of which are in the tidyverse. The three tidy functions will be used for routine data wrangling. The 3 other packages will be used to work with the spatial data. The first package is `sf` and it is my personal preferred package to use when working with spatial data. The `sf` package contains all of the spatial operation functions needed for routine spatial analysis, and the syntax meshes well with the tidyverse. The `sf` package introduces the `sf` type, and you can think of the `sf` type as a spatial data frame. It is like a normal vanilla data frame but there is an additional "geometry" column that is of list column type, and that column contains all of the spatial information. 
+In preparation for craggy 2019, here is a very brief introduction to simple ways to visualize spatial data. This notebook will introduce some R packages and functions to visualize spatial data. The notebook will use 6 total packages, 3 of which are in the tidyverse. The three tidy functions will be used for routine data wrangling. The 3 other packages will be used to work with the spatial data. The first package is `sf` and it is my personal preferred package to use when working with spatial data. The `sf` package contains all of the spatial operation functions needed for routine spatial analysis, and the syntax meshes well with the tidyverse. The `sf` package introduces the `sf` type, and you can think of the `sf` type as a spatial data frame. It is like a normal vanilla data frame but there is an additional "geometry" column that is of list column type, and that column contains all of the spatial information. 
 
 The next package we will be using is `mapview` and it provides functionality to create interactive web maps. If you need to quickly visualize your spatial data `mapview` is a great first tool to use. 
 
@@ -30,7 +38,10 @@ library(tigris)  # downloading geospatial data from the census
 To start I will read the evictions data into memory. The data is stored in a csv so I will use `read.csv()` to read the data and assign the data frame to evictions. After reading the data into memory I will print the first five rows.
 
 ```{r load the evictions data}
-evictions <- read.csv("data/evictions.csv", stringsAsFactors = FALSE)
+evictions <- read.csv(
+  system.file("extdata", "evictions.csv", package = "craggy2019"), 
+  stringsAsFactors = FALSE
+)
 
 head(evictions, n = 5)
 ```
