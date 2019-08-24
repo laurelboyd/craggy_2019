@@ -7,6 +7,8 @@
 1. [cRaggy is Back - Looking at Housing and Evictions in King County](#craggy-is-back---looking-at-housing-and-evictions-in-king-county)
 1. [Data Source](#data-source)
 1. [Accessing the data](#accessing-the-data)
+    1. [Add your code to the existing source code](#add-your-code-to-the-existing-source-code)
+    1.[Use the `craggy2019` package from your own independent project](#use-the-craggy2019-package-from-your-own-independent-project)
 1. [Examples and kick-starters](#examples-and-kick-starters)
 1. [Notes and resources](#notes-and-resources)
 1. [License](#license)
@@ -15,9 +17,9 @@
 
 <!-- badges: start -->
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
 
 > Disclaimer: this package is experimental and intended for use simply as an informal exercise for working with data in the [R language](https://www.r-project.org/). Read the [NEWS.md](NEWS.md) for recent updates.
-<!-- badges: end -->
 
 ---
 
@@ -42,34 +44,40 @@ This dataset came from the [SDSS 2019 Data Hack Activity](https://ww2.amstat.org
 ## Accessing the data
 
 This project is organized as an [R package](https://r-pkgs.org/), which
-contains the data. An easy way to access the data is to:
+contains the data and includes some examples of reading, exploring, analyzing, and visualizing the data. There are several ways to use this project.
 
-1. Clone this repository to your local machine.
-1. Open the project in [RStudio](https://www.rstudio.com/products/rstudio/).
-1. Click on the `Build > Install and Restart` button, which in the
-    default application configuration
-    is in the `Environment, History, ...` pane in the upper right of
-    the application window.
-1. The package will be built, installed in your local package library, 
-    and loaded into your session. 
-    When you see `library(craggy2019)` executed in
-    the console, then the build and load is complete and your environment
-    is ready for you to use the package.
-1. The data files are in the `inst/extdata` directory, so you can refer to
-    them through the file system, 
-    e.g. `here::here("inst", "extdata", "evictions.csv")`.
-1. However, often you will be using this package in another project
-    where you are exploring and analyzing the data.
-    In that case, you load the package into your session with
-    a `library(craggy2019)` call.
-    Then use the `base::system.file` function to reference a file
-    within the package. 
-    For example, 
-    `readr::read_csv(system.file("extdata", "evictions.csv", package = "craggy2019"))`. 
-    With `system.file`, you do not reference the
-    `inst` directory level. When a package is loaded, 
-    everything within the `inst` directory is placed at the 
-    root level of the package.
+### Add your code to the existing source code
+
+Situation: You want to use the existing sample code and write your own code within the same source structure of this package. You might want to contribute some of your code back to this project, but you are not sure about that yet.
+
+Solution: [Fork](https://help.github.com/en/articles/fork-a-repo) the project, so that you can work in your own version. A "fork" is linked back to the original code, so that you can contribute changes later, if you so choose, by making a [Pull Request](https://help.github.com/en/articles/creating-a-pull-request-from-a-fork).
+
+1. [Fork](https://help.github.com/en/articles/fork-a-repo) this project, which creates a separate copy in _your_ Github account.
+1. [Clone](https://help.github.com/en/articles/cloning-a-repository) the repository that is now forked in _your_ Github account to your local machine.
+1. Open the copy on your local machine in [RStudio](https://www.rstudio.com/products/rstudio/).
+1. Click on the `Build > Install and Restart` button, which in the default application configuration is in the `Environment, History, ...` pane in the upper right of the application window.
+1. The package will be built, installed in your local package library, and loaded into your session. When you see `library(craggy2019)` executed in the console, then the build and load is complete and your environment is ready for you to use the package.
+1. Now you can use the `base::system.file` function to reference a data file within the loaded package. For example, `readr::read_csv(system.file("extdata", "evictions.csv", package = "craggy2019"))`. This will read data from the loaded package in the R Session, _not_ from the file system.
+1. Alternatively, you can refer to the data files through the file system in the `inst/extdata` directory, e.g. `here::here("inst", "extdata", "evictions.csv")`.
+1. As you write code and perhaps add more data, you will commit those changes in git on your local machine. From time to time, you should [Push](https://help.github.com/en/articles/pushing-commits-to-a-remote-repository) those changes to _your_ Github account. Since you `forked` the project, those changes will only affect _your_ repository, not the `pdxlang/craggy_2019` repository.
+
+### Use the `craggy2019` package from your own independent project
+
+Situation: You already have a project where you want to write code to read, explore, analyze, and visualize the Evictions data. You do _not_ want to write your code within the framework of this `craggy2019` package source code.
+
+Solution: You just need to install and load this `craggy2019` package in your local environment, so that you can access the data that it contains.
+
+1. Install the `craggy2019` package:
+```r
+    install.packages("remotes")
+    library(remotes)
+    remotes::install_github("pdxrlang/craggy_2019")
+    # Note: Unfortunately, the repository name and package name do not match!
+    library(craggy2019)
+```
+1. Now you can use the `base::system.file` function to reference a data file within the package. For example, `readr::read_csv(system.file("extdata", "evictions.csv", package = "craggy2019"))`. This will read data from the loaded package in the R Session, _not_ from the file system.
+1. _Note_: With `system.file`, you do not reference the `inst` directory level, which is the root level for the data files in the _source code_, but it is _not_ the root level for the data in the _loaded package_. When a package is loaded, everything within the `inst` directory is placed at the root level of the package. So you start at the `extdata` directory level, which is the level that holds all of the data files that we are using for this project.
+1. _FYI_: `inst/extdata` is the R package convention for [where data is placed within a package](https://r-pkgs.org/data.html). Almost all packages follow that convention, so we followed it for this project too.
 
 ## Examples and kick-starters
 
