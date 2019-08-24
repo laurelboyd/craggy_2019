@@ -24,6 +24,7 @@ library(vroom)
 library(inspectdf)
 library(skimr)
 library(janitor)
+library(craggy2019)
 ```
 Generate a minimally serviceable data frame:
 ```{r}

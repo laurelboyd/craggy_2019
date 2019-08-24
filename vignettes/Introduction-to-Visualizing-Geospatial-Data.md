@@ -1,7 +1,7 @@
 Introduction to Geospatial Visualization
 ================
 [Marley Buchman](https://github.com/buchmayne)
-2019-08-23
+2019-08-24
 
 In preparation for craggy 2019, here is a very brief introduction to
 simple ways to visualize spatial data. This notebook will introduce some
@@ -38,6 +38,9 @@ library(stringr)
 library(sf)  # working with spatial data
 library(mapview)  # quick and easy geospatial visualizations
 library(tigris)  # downloading geospatial data from the census
+
+# data package
+library(craggy2019)
 ```
 
 To start I will read the evictions data into memory. The data is stored

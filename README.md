@@ -99,7 +99,7 @@ These examples can help you start analyzing the data:
 
   * Hosted [burro](https://laderast.github.io/burro/) demo: [Browse King County evictions data](https://tladeras.shinyapps.io/evictions_king_county/).
   * [Run burro in your local environment](vignettes/evictions.Rmd).
-  * [Introduction to Geospatial Visualization](vignettes/Introduction_to_Visualizing_Geospatial_Data.md) for the King County data.
+  * [Introduction to Geospatial Visualization](vignettes/Introduction-to-Visualizing-Geospatial-Data.md) for the King County data.
   * [Read data from the `oneNightCount.csv` file](vignettes/demo-1night-vroom-etc.md) with [vroom](https://cran.r-project.org/package=vroom) and summarize the contents with [skimr](https://cran.r-project.org/package=skimr) and [inspectdf](https://cran.r-project.org/package=inspectdf).
 
 ## Notes and resources
