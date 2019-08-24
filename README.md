@@ -8,7 +8,7 @@
 2. [Data Source](#data-source)
 3. [Accessing the data](#accessing-the-data)
 
-    3.1 [Add your code to the existing source code](#add-your-code-to-the-existing-source-code)
+    3.1 [Add your code to the existing source code](#add-your-code-to-the-existing-source-code)  
     3.2 [Use the `craggy2019` package from your own independent project](#use-the-craggy2019-package-from-your-own-independent-project)
 
 4. [Examples and kick-starters](#examples-and-kick-starters)
