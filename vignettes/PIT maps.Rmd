@@ -9,48 +9,47 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-# How does King County compare?
+# Homelessness in the United States: How does King County compare?
 
 This analysis attempts to answer the question of how seattle/King County is doing relative to the rest of the country in addressing homelessness, using only publically available data.
 
 # Point In Time Counts
 
-Point in time (PIT) surveys are required by the United States Department of Housing and Urban Development (HUD) for receipt of monies to provide homeless services. Although comparison between regions is difficult due to the different methodologies accepted by HUD, without other data sources, it is a reasonably proxy for assessing relative differences in homelessness throughout the country. [^1] 
+Point in time (PIT) surveys are conducted on a rrgulat basis throughout the US to estimate numbers of homeless individuals. Although required by the United States Department of Housing and Urban Development (HUD) for receipt of monies to provide homeless services by Continuity of Care (CoC) Regions, comparison between regions is limited due to the various different methodologies for conducting PIT surveys.[^1]  Without access to other data sources (we could think about hospitalization, incarceration, and other data collected by social service agencies), it is a reasonably proxy for assessing relative differences in homelessness throughout the country and seeing how King County compares.
 
-In order to compare estimated rates of homelessness across the US, we need to account for small populations (which inflate rates if unadjusted). For this analysis, we'll use the most recent Census population estimates from the American Community Survey and will adjust for small populations using Global Empirical Bayes (EB) rate estimate.
+For this analysis, we'll use the most recent (2017) Census population estimates from the American Community Survey.
 
 [^1] https://files.hudexchange.info/resources/documents/PIT-Count-Methodology-Guide.pdf
 
-This is a multi-step process:
+This is a multi-step process (note that bullet 4 seems exceedingly simple but isn't!):
 
-Load data:
-
-* 2017 Point in time counts for the entire nation by CoC region
-* CoC shapefiles from HUD
-* County population estimates from most recent Census (American Community Survey estimates from 2017)
-
-Do some spatial math:
-
-* Smooth population counts across census tracts.
+* Find 2017 Point in Time counts for the entire nation by CoC region
+* Find HUD CoC shapefiles 
+* Find county population estimates from most recent Census (American Community Survey estimates from 2017)
 * Overlay CoC regions on top of census tracts and calculate population for each region. (Unininsured would be interesting to look at if there's time.)
-* Divide homeless counts by total population to calculate Global Empirical Bayes (EB) rate estimate.
+* Divide homeless counts by total population to calculate homeless population rates.
 * Map findings.
 
 
-
 ```{r load packages}
+
 library(dplyr) #data manipulation
 library(rio) #speedy data import tool
 library(leaflet) #mapping package
 library(mapview) #mapping package (leaflet wrapper)
 library(httr) #need this to use "GET" call for getting CoC geodatabase
 library(rgdal) # mapping statistics/functions
-library(sf) # "spatial features" do some mapping (this is the newer package)
-library(sp) # do some mapping (this is the older package)
+library(sf) # newer "spatial features" package
+library(sp) # older spatial package; has some functionality the sf package doesn't have (e.g., "over")
 library(ggplot2) #another way to make maps 
 library(janitor) #cleaning, tables with totals
 library(stringr) #regex functionality in dplyr
 library(tidycensus) #Census population estimates
+library(rgeos) #polygon to polygon intersections
+library(RColorBrewer) #color palatte for choropleth maps
+library(htmltools) #labels for leaflet
+library(scales) #needed for comma function in leaflet legend
+library(lwgeom)#fix geography with st_make_valid
 ```
 ```{r }
 ###################################################################################
@@ -65,7 +64,7 @@ y2017 <- rio::import(file, which = 2)[,fieldmap$y2017] #207 since that's the mos
 names(y2017) <- fieldmap$shortname
 y2017$year <- 2017
 
-#400 items; 1 NA column and 1 gobbly gook: "a MO-604 covers territory in both Missouri..."
+#400 regions in the file including 2 that are bogus: 1 NA/Totals column and 1 gobbly gook: "a MO-604 covers territory in both Missouri..."
 #y2017 %>% distinct(coc_number)
 
 #drop down to 398
@@ -74,12 +73,58 @@ y2017 <-y2017 %>%
 
 #need numeric columns for joining to CoC regions
 y2017$overall_homeless <- as.numeric(as.character(y2017$overall_homeless))
+y2017$unsheltered_homeless <- as.numeric(as.character(y2017$unsheltered_homeless))
+#drop everything else...
+y2017 <- y2017[ -c(4:7, 9:28) ]
 
+#look at distribution of homelessness across regions
+
+
+#highlight king county
+#y2017<-y2017 %>% mutate( ToHighlight = ifelse( y2017$coc_number == "WA-500", "yes", "no" ) )
+
+#bar chart
+# ggplot( y2017, aes( x = reorder(coc_name, overall_homeless), y = overall_homeless, fill = ToHighlight ) ) +
+#     geom_bar( stat = "identity" ) +
+#     scale_fill_manual( values = c( "yes"="orange", "no"="gray" ), guide = FALSE )+
+#    ylim(0, 80000)+
+#     xlab("308 Continuity of Care (CoC) Regions") +
+#   ylab("Overall homeless count") +
+#   ggtitle("Homeless counts across the United States, 2017")+
+#   theme(axis.text.x=element_blank())+
+#   scale_y_continuous(position = "right")
+
+#there are more elegant ways of doing the below...
+y2017$king <- 11643
+y2017$LA <-52442
+y2017$NYC <-76501
+  
+#histogram
+ggplot(y2017, aes(overall_homeless))+
+  geom_histogram(fill ="orange", color = "white", bins = 100) +
+   xlim(0, 80000)+
+  xlab("Overall homeless persons") +
+  ylab("Number of regions") +
+  ggtitle("Seattle is third in the nation in overall homeless counts for 2017")+
+theme(plot.title = element_text(hjust = 0.5)) +
+geom_vline(aes(xintercept = king), lty="dashed", color = "gray") +
+  geom_vline(aes(xintercept = LA), lty="dashed", color = "gray") +
+  geom_vline(aes(xintercept = NYC), lty="dashed", color = "gray") +
+geom_text(aes(label  = paste("Seattle = ", king), x= king, y = 55))+
+geom_text(aes(label  = paste("Los Angeles = ", LA), x= LA, y = 55))+
+geom_text(aes(label  = paste("NYC = ", NYC), x= NYC, y = 55))   + theme_minimal()
+
+#drop extra vars
+y2017 <- y2017[ -c(5:9) ]
 ```
+
+The Seattle/King County CoC is third in the nation in terms of total overall homeless. In looking at the histogram of homeless counts by homeless (CoC) region, we can see that most regions have 10,000 or fewer homeless people (indeed, half of all regions have 549 or fewer homeless persons), but that several regions (Seattle, Los Angeles and New York City) have many more homeless. 
+
+Next we'll look at the rate of homelessness by region.
 
 ```{r }
 ###################################################################################
-####################  Import CoC regions and join PIT counts#######################
+####################  Import CoC regions and PIT counts#######################
 
 # HUD input file geodatabase
 url <- "https://www.hudexchange.info/resource/coc/gis/CoC_GIS_NatlTerrDC_Shapefile_2017.zip"
@@ -93,103 +138,228 @@ unzip("data.zip", overwrite = TRUE) #unzip file from downloads
 #class(FY17COC)
 
 # Read in the feature class
-x <- st_read(dsn="FY18_CoC_National_Bnd.gdb")
+x <- st_read(dsn="FY17_CoC_National_Bnd.gdb")
 
 # Rename column names in geodatabase layer to match PIT counts file
 names(x)[names(x) == 'COCNUM'] <- 'coc_number'
+names(x)[names(x) == 'COCNAME'] <- 'coc_name'
 
 #join 2017 PIT counts to map before converting to a spatal layer
-y <- dplyr::inner_join(x, y2017)
-z <- st_zm(y)
-FY17COC <- as(z, "Spatial") #SpatialPolygonsDataFrame # "sp" type
-#sf::st_crs(FY17COC) #check coordinate reference system (CRS)
-FY17COC <- sf::st_as_sf(FY17COC) #convert to "sf" type
+#y <- dplyr::inner_join(x, y2017)
+FY17COC <- sf::st_as_sf(x) #convert to "sf" type
 #class(FY17COC) #yep, now "sf"
+#need to define datum for use in later operations
+FY17COC <- st_transform(FY17COC, 4326) 
+#sf::st_crs(FY17COC) #check coordinate reference system - is the datum defined? yep.
 
 #map CoC regions
 #mapview(FY17COC)
 
-#is this needed?
-#FY17COC <- st_transform(FY17COC, CRS("+proj=longlat +datum=WGS84")) #need to define datum for use by leaflet
-#sf::st_crs(FY17COC) #check coordinate reference system
-   
-```
+ ```
 
 ```{r }
 ###################################################################################
-####################  Import census data ##########################################
+####################  Import census data and join layers ##########################
 
 #load population counts fron tidycensus package (most recent American Community Survey data is from 2017)
 #http://zevross.com/blog/2018/10/02/creating-beautiful-demographic-maps-in-r-with-the-tidycensus-and-tmap-packages/
 
 #step 1: request Census API: https://api.census.gov/data/key_signup.html
 #step 2: figure out which table (total population counts) to import (e.g. "B######")-> go to  https://censusreporter.org/
-#step 3: join CoC regions and counties and aggregate population counts at CoC region level
-#step 4: run spatial statistics and map findings
+#step 3: clean geometries
+#step 4: convert counties to centroids
+#step 5: add buffer to centroids (see side note below for reason)
+#step 6: join county centriods to CoC regions a
+#step 7: note the large file size from step 6: silently dissolve counties into regions 
+#step 8: merge PIT counts to spatial layer an calculate homelessness rates at CoC region level
+#step 9: map findings
 
 #STEP 1:
 #census_api_key("YOUR KEY GOES HERE", install = TRUE)
 #readRenviron("~/.Renviron")#run this the first time you use this key
 #Sys.getenv("CENSUS_API_KEY")#Check yer work!
 
-#STEPS 2-3:
-POPCOUNTS <- get_acs("county", table= "B00001", year = 2017,
+#STEP 2:
+
+ COUNTIES <- get_acs("county", table= "B00001", year = 2017,
  output = "tidy", state = NULL, geometry = TRUE, shift_geo = FALSE) %>% #add cache_table = TRUE first time you run this
-  rename (`popcount` = estimate) 
-POPCOUNTS <- st_transform(POPCOUNTS, CRS("+proj=longlat +datum=WGS84")) #need to define datum for use by leaflet
-POPCOC <- st_join(FY17COC,POPCOUNTS)
+  rename (`county_population` = estimate) 
+COUNTIES <- st_transform(COUNTIES, 4326) #need to define datum for merging - and use by leaflet
 
-mapview(POPCOC)
+#STEP 3:
+#check to see if the geometries are valid -> #https://www.r-spatial.org/r/2017/03/19/invalid.html
+#turns out the CoC shapefile is not valid...
+#st_is_valid(FY17COC) #nope; use some tools below when you join to fix this issue
 
-#mapview(POPCOUNTS) + mapview(FY17COC)
+#STEP 4:
+#convert counties to centroids (waaay less processing time than joining polygons to polygons; fixes many issues where the polygon shapes don't match...)
+
+#references: https://r-spatial.github.io/sf/reference/st_join.html
+
+        # # #case study/demo: WA state
+        # # 
+        # #WA counties only
+        # WACOUNTIES <-COUNTIES %>%
+        #   filter(str_detect(GEOID, "^53"))
+        # 
+        # #WA CoC regions only
+        # WACOC <-FY17COC %>%
+        #   filter(str_detect(STATE_NAME, "^Washing"))
+        # 
+        # #select counties cooresponding to "WA balance of State CoC"
+        # restofWA <-WACOUNTIES%>%
+        #   filter(!NAME %in%  c("King County, Washington", "Spokane County, Washington", "Yakima County, Washington", "Pierce County, Washington", "Snohomish County, Washington", "Clark County, Washington"))
+        # 
+        # #how many people live in this CoC?
+        # restofWA%>%
+        #   mutate(totalpop = sum(population))
+        # 
+        # #how many people live in all of WA?
+        # WACOUNTIES%>%
+        #   mutate(totalpop = sum(population))
+        # 
+        # mapview(restofWA)+mapview(AAA1)
+        # 
+        # #so, what happens when we join the centroids to CoC regions?
+        # AAA1 <-st_join(st_make_valid(WACOC), WACOUNTIES, left = TRUE) %>%
+        #   group_by(coc_name)%>%
+        #   mutate(region_population = sum(county_population)) %>%
+        #   mutate(prop_homeless = overall_homeless/region_population) %>%
+        #        ungroup()
+        # 
+
+        # mapview(AAA1)
+        # AAA1$prop_homeless
+        
+        # #195064 total pop in "balance of state CoC"- 165927 population as calculated = 29137 difference!
+        # #Turns out this is the sum of the populations of the island counties!
+        # #centroids for these bad boys are somewhere in the ocean; they don't match up with the CoC regions...
+
+#ahem - back to step 4: convert to centroids
+COUNTIEScentroid <- st_centroid(COUNTIES) 
+#step 5: add 1/10 mile buffer to centroids 
+COUNTIEScentroid_buffer <-st_buffer(COUNTIEScentroid, 0.1) 
+#step 6:join centroids to CoC regions 
+FY17COC_COUNTIES <-st_join(st_make_valid(FY17COC), COUNTIEScentroid_buffer, left = FALSE)  #st_make_valid fixes issues in the CoC layer
+
+#step 7: silently dissolve counties into regions and aggregate population counts
+pop_by_regions = FY17COC_COUNTIES %>% group_by(coc_name) %>%
+  summarize(pop = sum(county_population, na.rm = TRUE))
+
+#step 8:add PIT attributes to regional sf object
+percent_by_regions <- dplyr::inner_join(pop_by_regions, y2017)%>%
+   mutate(prop_homeless = overall_homeless/pop) 
+
+#look at the map
+#mapview(percent_by_regions)
 
 
 ```
 ```{r }
 ###################################################################################
-####################  Calculate rates and do some spatial statistics ##############
+####################  Mapping rates ###############################################
 
-#helpful for thinking about which mapping strategy makes sense:
-# if using rural areas, adjust for low population counts
-# https://mgimond.github.io/Spatial/mapping-rates-in-r.html
+# helpful resource: https://rstudio.github.io/leaflet/choropleths.html
 
 
+#create bins for map
+#distribution is left-skwewed so instead of using equal-sized bins (e.g. 10,000 people/bin) use quintiles instead
 
-#what's the breakdown of homelessnes throughout the CoC's?
-#summary(FY18COC$overall_homeless)
-#tabyl(FY18COC$overall_homeless)
+# FY17COC<- FY17COC %>%
+#   filter(!is.na(overall_homeless))
+# 
+# qpal <- colorQuantile("Oranges", FY17COC$overall_homeless, n = 5)
+# qpal_colors <- unique(qpal(sort(FY17COC$overall_homeless) )) # hex codes
+# qpal_labs <- quantile(FY17COC$overall_homeless, seq(0, 1, .2)) # depends on n from pal
+# qpal_labs <- paste(lag(qpal_labs), qpal_labs, sep = " - ")[-1] # first lag is NA
 
 
-# https://rstudio.github.io/leaflet/choropleths.html
-
-#bins <- c(0, 500, 1000, 5000, 10000, 20000, 40000, Inf)
-#pal <- colorBin("PuRd", domain = FY18COC$overall_homeless, bins = bins)
-
-# labels <- sprintf(
-#   "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
-#   states$name, states$density
-# ) %>% lapply(htmltools::HTML)
-
-# m <- m %>% addPolygons(
-#   fillColor = ~pal(overall_homeless),
-#   weight = 2,
-#   opacity = 1,
-#   color = "white",
-#   dashArray = "3",
-#   fillOpacity = 0.7,
-#   highlight = highlightOptions(
-#     weight = 5,
-#     color = "#666",
-#     dashArray = "",
+#map
+# leaflet(FY17COC) %>%
+#   addProviderTiles("Stamen.TonerLite") %>%
+#    setView(-96, 37.8, 4)%>%
+#    addPolygons(
+#     # fill
+#     fillColor   = ~qpal(overall_homeless),
 #     fillOpacity = 0.7,
-#     bringToFront = TRUE))%>%
-#    addLegend(pal = pal, values = ~overall_homeless, opacity = 0.7, title = NULL,
+#     # line
+#     dashArray   = "3",
+#     weight      = 2,
+#     color       = "white",
+#     opacity     = 1,
+#     # interaction
+#     highlight = highlightOptions(
+#       weight = 5,
+#       color = "#666",
+#       dashArray = "",
+#       fillOpacity = 0.7,
+#       bringToFront = TRUE),
+#   label = labels,
+#   labelOptions = labelOptions(
+#     style = list("font-weight" = "normal", padding = "3px 8px"),
+#     textsize = "15px",
+#     direction = "auto")) %>%
+#   addLegend(
+#    colors = qpal_colors, labels = qpal_labs, opacity = 0.7, title = HTML("Total homelessness counts"),
 #   position = "bottomright")
-# m
+
+percent_by_regions$prop_homeless10k <- percent_by_regions$prop_homeless*10000
+#some HMTL code to format labels
+labels <- sprintf(
+  "<strong>%s</strong><br/> Overall homeless per 10,000 people: %s",
+  percent_by_regions$coc_name , comma(percent_by_regions$prop_homeless10k)) %>% 
+  lapply(HTML)
+
+binpal <- colorBin("Oranges", percent_by_regions$prop_homeless10k, 7, pretty = FALSE)
+
+
+leaflet(percent_by_regions) %>%
+  addProviderTiles("Stamen.TonerLite") %>%
+   setView(-96, 37.8, 4)%>%
+   addPolygons(
+    # fill
+    fillColor   = ~binpal(prop_homeless10k),
+    fillOpacity = 0.7,
+    # line
+    dashArray   = "3",
+    weight      = 2,
+    color       = "white",
+    opacity     = 1,
+    # interaction
+    highlight = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE),
+  label = labels,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto")) %>%
+  addLegend(
+   pal = binpal, values = ~prop_homeless10k, opacity = 0.7, title = HTML("Overall homelessness rates per 10,000 population"),
+  position = "bottomright")
+
+#histogram
+percent_by_regions$king <- 778
+ggplot(percent_by_regions, aes(prop_homeless10k))+
+  geom_histogram(fill ="orange", color = "white", bins = 100) +
+   #xlim(0, 80000)+
+  xlab("Rate of homeless persons per 10,000 population") +
+  ylab("Number of regions") +
+  ggtitle("Seattle is tenth in the nation in rate of overall homeless for 2017")+
+theme(plot.title = element_text(hjust = 0.5))+
+geom_vline(aes(xintercept = king), lty="dashed", color = "gray") +
+ # geom_vline(aes(xintercept = LA), lty="dashed", color = "gray") +
+  #geom_vline(aes(xintercept = NYC), lty="dashed", color = "gray") +
+geom_text(aes(label  = paste("Seattle = ", king), x= king, y = 30))
+#+
+#geom_text(aes(label  = paste("Los Angeles = ", LA), x= LA, y = 55))+
+#geom_text(aes(label  = paste("NYC = ", NYC), x= NYC, y = 55))   + theme_minimal()
 
 ```
 
 ## How does Seattle CoC compare with other areas of the US?
 
-
-
+From mapping overall rates of homeless by population, we can see that the West Coast (San Francisco, Oregon)
